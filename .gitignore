@@ -1,0 +1,43 @@
+# R bullshit
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Environments
+.env
+.venv
+.ds
+ds/
+env/
+venv/
+ENV/
+ds.bak/
+env.bak/
+venv.bak/
+
+# tests
+workflow.py
+model/ipynb_checkpoints
+model/__pycache__
+model/__pycache__/Kuma.cpython-310.pyc
+__init__.py
+.DS_Store
+/.luarc.json
