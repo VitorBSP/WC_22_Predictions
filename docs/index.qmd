@@ -558,6 +558,60 @@ analyze(rlog)
 :::
 
 
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Previsões e comentários
+:::
+
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Previsões e comentários
+:::
+
+<center>
+
+![É o Brasa! Rumo ao Hexa!](images/bandeiragrande.jpg){fig-align="center" width="700"}
+
+</center>
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Previsões e comentários
+:::
+
+::: {.panel-tabset}
+
+### Random Forest
+
+<center>
+
+![Outro caminho para o Hexa](images/prevision_rf.png){fig-align="center" width="900"}
+
+</center>
+
+
+### Gradient-Boosting
+
+<center>
+
+![Outro caminho para o Hexa](images/prevision_gb.png){fig-align="center" width="700"}
+
+</center>
+
+### Regressão Logística
+
+<center>
+
+![Todos os caminhos levam ao hexa](images/prevision_rlog.png){fig-align="center" width="700"}
+
+</center>
+
+:::
 
 ## {auto-animate=true}
 
@@ -565,4 +619,12 @@ analyze(rlog)
 Obrigado!
 :::
 
-![](http://lh4.ggpht.com/du4ZqBkSCfIrvAj3FMqRIb3wwlQ2RM6DrQstuqzss5pLvYskHmb0Vb0r8Qdq2t5kppByVlhLQKp3bdMTaBpUeqwx3pCKbq8NImWGzcnx=s0){.absolute top=480 right=70 width="450" height="200"}
+<center>
+
+![Machine Learning > Polvo Paul](images/polvo.gif){fig-align="center" width="600"}
+
+</center>
+
+:::footer 
+Futorologia é legal, principalmente se acertar!
+:::
