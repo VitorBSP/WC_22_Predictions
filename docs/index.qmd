@@ -1,0 +1,568 @@
+---
+title: "Trabalho 1 - Machine Learning"
+subtitle: "  "
+author: "Vítor Pereira"
+institute: "UFSM - CCNE"
+title-slide-attributes:
+  data-background-image: images/wallpaper2.png
+  data-background-size: contain
+  data-background-opacity: "0.2"
+format:
+  revealjs:
+    slide-number: c/t
+    theme: default #dark
+    logo: "images/logo2.png"
+    smaller: True
+editor_options: 
+  chunk_output_type: inline
+---
+
+## Sumário
+
+<hr/>
+
+<br/>
+
+<br/>
+
+- Ideias
+
+<p>
+
+- Feature Engineering
+
+<p>
+
+- Análise das covariáveis 
+
+<p>
+
+- Covariáveis Finais
+
+<p>
+
+- Previsões e comentários
+
+::: footer
+Polvo Paul seu legado está acabando.
+:::
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 200px; font-size: 3em; font-weight: bold;"}
+Ideias
+:::
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Ideias
+:::
+
+
+<hr/>
+<br/>
+<br/>
+
+<p>
+
+- Modelo para reconhecimento de animais (começando com felinos ) 
+
+<p>
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Ideias
+:::
+
+
+<hr/>
+<br/>
+<br/>
+
+
+<p>
+
+- ~~Modelo para reconhecimento de animais (começando com felinos)~~ 
+
+<p>
+
+- Modelo para previsão de casos do covid 
+
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Ideias
+:::
+
+
+<hr/>
+<br/>
+<br/>
+
+<p>
+
+- ~~Modelo para reconhecimento de animais (começando com felinos)~~ 
+
+<p>
+
+- ~~Modelo para previsão de casos do covid~~
+
+<p>
+
+- Modelo básico de NLP para previsão da sessão do produto
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Ideias
+:::
+
+
+<hr/>
+<br/>
+<br/>
+
+<p>
+
+- ~~Modelo para reconhecimento de animais (começando com felinos)~~ 
+
+<p>
+
+- ~~Modelo para previsão de casos do covid~~
+
+
+<p>
+
+- ~~Modelo básico de NLP para previsão da sessão do produto~~
+
+<p>
+
+- Resolvi Inovar!
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 200px; font-size: 3em;  font-weight: bold;"}
+Modelo sobre Futebol 
+:::
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Modelo sobre Futebol
+:::
+
+
+<hr/>
+<br/>
+<br/>
+
+<p>
+
+- Objetivo: prever campeão da copa.
+
+<p>
+
+- Estabelecer variáveis com poderes preditivos para partidas de futebol
+
+<p>
+
+- Utilizando dois datasets: Ranking Fifa e todas as partidas de seleções
+
+<p>
+
+- A estruturação do trabalho foi desenvolvida em [Soccer World Cup 2018 Winner](https://www.kaggle.com/code/agostontorok/soccer-world-cup-2018-winner), que também desenvolveu previsões para 2022 em [Predicting FIFA 2022 World Cup with ML](https://www.kaggle.com/code/sslp23/predicting-fifa-2022-world-cup-with-ml).
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 200px; font-size: 3em;  font-weight: bold;"}
+Feature Engineering
+:::
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Feature Engineering
+:::
+
+<hr/>
+
+
+```{python}
+import numpy as np 
+import pandas as pd
+import re 
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, roc_curve, roc_auc_score
+from operator import itemgetter
+import seaborn as sns
+import matplotlib.pyplot as plt
+```
+
+<style>
+table.dataframe {
+font-size:70%;
+}
+</style>
+
+<br/>
+<br/>
+```{python}
+df =  pd.read_csv("../data/results.csv")
+df["date"] = pd.to_datetime(df["date"])
+df = df.dropna()
+df.head()
+```
+
+
+## 
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Feature Engineering
+:::
+
+<hr/>
+<br/>
+<br/>
+
+::: {.panel-tabset}
+
+### Ciclo da Copa 
+
+```{python}
+df = df.query("date >= '2018-6-14'").reset_index(drop=True)
+df.head()
+```
+
+### Ranking da Fifa
+
+```{python}
+rank = pd.read_csv("../data/fifa_ranking-2022-10-06.csv")
+rank.head()
+```
+
+:::
+## 
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Feature Engineering
+:::
+
+<hr/>
+
+### Descrição das variáveis 
+
+<br/>
+
+```{python}
+df.describe()
+```
+
+
+## 
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Feature Engineering
+:::
+<hr/>
+<br/>
+
+
+<p>
+- Variáveis relacionadas a futebol tem que mensurar dois conceitos principais: qualidade e momento
+
+<p>
+- Criar variáveis para mensurar a qualidade da seleção durante o ciclo
+
+<p>
+- Qualidade: Desempenho e nível dos adversário durante o ciclo
+
+<p>
+- Momento: Desempenho nas últimas partidas (5, 10, 15 e 30 jogos)
+
+
+## 
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Feature Engineering
+:::
+<hr/>
+
+<p>
+- Pontos feitos em jogos anteriores
+
+<p>
+- Gols marcados e sofridos em partidas anteriores
+
+<p>
+- Importância da partida (amistoso ou não)
+
+<p>
+- Posição dos times no ranking da FIFA
+
+<p>
+- Evolução do ranking das seleções
+
+<p>
+- Gols sofridos e marcados pelo ranking da equipe
+
+<p>
+- Escore do ranking da FIFA (discretização)
+
+
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 200px; font-size: 3em; font-weight: bold;"}
+Análise das variáveis
+:::
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Análise das variáveis
+:::
+
+<hr/>
+
+<br/>
+<br/>
+
+```{python}
+team_stats_raw = pd.read_csv("../data/team_stats_by_match.csv")
+team_stats_raw.iloc[:, 1:(team_stats_raw.shape[1]-3)].head()
+```
+
+```{python}
+df = pd.read_csv("../data/full_features_of_matches.csv")
+df = df.query("result != 2")
+```
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Análise das variáveis
+:::
+
+<hr/>
+
+```{python}
+#| fig-align: center
+
+data_rank_dif = df[['result', 'rank_dif', 'home_rank_mean', 'home_rank_mean_l5', 'home_rank_mean_l10', 'home_rank_mean_l15', 'home_rank_mean_l30']]
+data_rank_dif = pd.melt(data_rank_dif, id_vars="result", var_name="features", value_name="value")
+plt.figure(figsize=(8,6))
+sns.violinplot(x="features", y="value", hue="result", data=data_rank_dif,split=True, inner="quart")
+plt.xticks(rotation=90)
+plt.show()
+```
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Análise das variáveis
+:::
+
+```{python}
+#| fig-align: center
+
+dif = df.copy()
+dif.loc[:, "goals_per_ranking_dif"] = (dif["home_goals_mean"] / dif["home_rank_mean"]) - (dif["away_goals_mean"] / dif["away_rank_mean"])
+dif.loc[:, "goals_per_ranking_dif_l5"] = (dif["home_goals_mean_l5"] / dif["home_rank_mean"]) - (dif["away_goals_mean_l5"] / dif["away_rank_mean"])
+dif.loc[:, "goals_per_ranking_dif_l15"] = (dif["home_goals_mean_l15"] / dif["home_rank_mean"]) - (dif["away_goals_mean_l15"] / dif["away_rank_mean"])
+
+data_difs = dif.iloc[:, -4:]
+scaled = (data_difs - data_difs.mean()) / data_difs.std()
+scaled["result"] = dif["result"]
+violin = pd.melt(scaled,id_vars="result", var_name="features", value_name="value")
+
+plt.figure(figsize=(8,6))
+sns.boxplot(x="features", y="value", hue="result", data=violin)
+plt.xticks(rotation=90)
+plt.show()
+```
+
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 200px; font-size: 3em; font-weight: bold;"}
+Covariáveis Finais
+:::
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Covariáveis Finais
+:::
+
+<p>
+- rank_dif
+
+<p>
+- goals_dif e goals_dif_l5
+
+<p>
+- goals_suf_dif e goals_suf_dif_l5
+
+<p>
+- dif_rank_agst e dif_rank_agst_l5
+
+<p>
+- goals_per_ranking_dif
+
+<p>
+- dif_points_rank e dif_points_rank_l5
+
+<p>
+- is_friendly
+
+<p>
+
+- points_by_classification
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Covariáveis Finais
+:::
+
+<hr/>
+
+### Diferenças 
+
+<br>
+
+<p>
+- Testes em covariáveis em diferentes cortes temporais (5, 10, 15 e 30 jogos)
+
+<p>
+- Tunnagem de hiperparâmetros
+
+<p>
+- Criação de novas variáveis discretizando o ranking e Gols Feitos de um time x Gols Sofridos do outro
+
+<P>
+- Curva ROC de 0.75 para 0.84 
+
+## {auto-animate=true}
+
+::: {style="margin-top: 200px; font-size: 3em; font-weight: bold;"}
+Previsões e comentários
+:::
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Previsões e comentários
+:::
+
+
+```{python}
+model_db = pd.read_csv('../data/modelling_dataset.csv')
+X = model_db.iloc[:, 3:]
+y = model_db[["result"]]
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.2, random_state=1)
+gb = GradientBoostingClassifier(random_state=15)
+
+params = {
+            "learning_rate": [0.03, 0.04],
+            "min_samples_split": [3],
+            "min_samples_leaf": [5],
+            "max_depth":[5],
+            "max_features":["sqrt"],
+            "n_estimators":[100, 200]
+         } 
+
+gb_cv = GridSearchCV(gb, params, cv = 5, n_jobs = -1, verbose = False)
+gb_cv.fit(X_train.values, np.ravel(y_train))
+gb = gb_cv.best_estimator_
+params_rf = {
+            "min_samples_split": [14, 15, 17],
+            "min_samples_leaf": [5],
+            "max_depth":[8],
+            "max_features":["log2", "sqrt"],
+            "max_leaf_nodes": [100],
+            "criterion": ["entropy", "log_loss"],
+            "n_estimators":[500]
+         } 
+
+rf = RandomForestClassifier(random_state=5)
+
+rf_cv = GridSearchCV(rf, params_rf, cv = 5, n_jobs = -1, verbose = False)
+
+rf_cv.fit(X_train.values, np.ravel(y_train))
+rf = rf_cv.best_estimator_
+params_rlog = {"C": np.arange(0.01,0.5,0.05), "penalty":["l1","l2", "elasticnet", "none"], "max_iter" : [10000]}# l1 lasso l2 ridge
+rlog = LogisticRegression()
+logreg_cv = GridSearchCV(rlog, params_rlog, cv=5, n_jobs = -1, verbose = False)
+logreg_cv.fit(X_train.values, np.ravel(y_train))
+rlog = logreg_cv.best_estimator_
+```
+
+
+```{python}
+def analyze(model):
+    fpr, tpr, _ = roc_curve(y_test, model.predict_proba(X_test.values)[:,1]) #test AUC
+    plt.figure(figsize=(8,6))
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.plot(fpr, tpr, label="test")
+
+    fpr_train, tpr_train, _ = roc_curve(y_train, model.predict_proba(X_train.values)[:,1]) #train AUC
+    plt.plot(fpr_train, tpr_train, label="train")
+    auc_test = roc_auc_score(y_test, model.predict_proba(X_test.values)[:,1])
+    auc_train = roc_auc_score(y_train, model.predict_proba(X_train.values)[:,1])
+    plt.legend()
+    plt.title('AUC score is %.2f on test and %.2f on training'%(auc_test, auc_train))
+    plt.show()
+```
+
+
+::: {.panel-tabset}
+
+### Gradient-Boosting
+
+```{python}
+#| fig-align: center
+analyze(gb)
+```
+
+
+### Random Forest
+
+```{python}
+#| fig-align: center
+analyze(rf)
+```
+
+### Regressão Logística
+
+```{python}
+#| fig-align: center
+analyze(rlog)
+```
+
+:::
+
+
+
+## {auto-animate=true}
+
+::: {style="margin-top: 10px; font-size: 2em; font-weight: bold;"}
+Obrigado!
+:::
+
+![](http://lh4.ggpht.com/du4ZqBkSCfIrvAj3FMqRIb3wwlQ2RM6DrQstuqzss5pLvYskHmb0Vb0r8Qdq2t5kppByVlhLQKp3bdMTaBpUeqwx3pCKbq8NImWGzcnx=s0){.absolute top=480 right=70 width="450" height="200"}

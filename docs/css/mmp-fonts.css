@@ -1,0 +1,29 @@
+/* Add maven for code font (keep other xaringan defaults */
+@import url(https://fonts.googleapis.com/css?family=Lato);
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+@import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+@import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+@import url(https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700);
+
+body {
+ font-family: 'Lato', 'Palatino Linotype', 'Book Antiqua', Palatino, 'Microsoft YaHei', 'Songti SC', serif;  
+
+  text-align: justify;
+  text-justify: inter-word;
+  line-height: 120%;
+}
+h1, h2, h3 {
+  font-family: 'Yanone Kaffeesatz';
+  font-weight: normal;
+  line-height: 100%;
+margin-block-start: 0.1em;/* 0.1em;*/
+  margin-block-end: 0.1em;
+
+}
+
+li, p {
+    line-height: 500%;
+    font-size: 10px;
+}
+.remark-code, .remark-inline-code { font-style: italic;font-family: 'Inconsolata', monospace; }
+.remark-code-line-highlighted     { background-color: #ffff88; }
