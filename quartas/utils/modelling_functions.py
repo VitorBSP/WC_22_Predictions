@@ -234,6 +234,7 @@ def simulation_playoff(advanced, model):
                 actual_round = p
             
         else:
+            print(playoffs)
             playoffs[p] = [[next_rounds[c], next_rounds[c+1]] for c in range(0, len(next_rounds)-1, 1) if c%2 == 0]
             next_rounds = []
             for i in range(0, len(playoffs[p])):
@@ -268,4 +269,103 @@ def simulation_playoff(advanced, model):
                 playoffs[p][i] = game
                 actual_round = p
     return playoffs
+
+def simulation_quartas(advanced, model):
+    playoffs = {"Quartas de Final": [], "Semi-Final": [], "Final": []}
+    for p in playoffs.keys():
+        playoffs[p] = []
+    actual_round = ""
+    next_rounds = advanced
+
+    for p in playoffs.keys():
+            playoffs[p] = [[next_rounds[c], next_rounds[c+1]] for c in range(0, len(next_rounds)-1, 1) if c%2 == 0]
+            next_rounds = []
+            for i in range(0, len(playoffs[p])):
+                game = playoffs[p][i]
+                home = game[0]
+                away = game[1]
+                team_1 = find_stats(home)
+                team_2 = find_stats(away)
                 
+                features_g1 = find_features(team_1, team_2)
+                features_g2 = find_features(team_2, team_1)
+                
+                probs_g1 = model.predict_proba([features_g1])
+                probs_g2 = model.predict_proba([features_g2])
+                
+                team_1_prob = (probs_g1[0][0] + probs_g2[0][1])/2*100
+                team_2_prob = (probs_g2[0][0] + probs_g1[0][1])/2*100
+                
+                if actual_round != p:
+                    print("-"*10)
+                    print("Começando a simulação de  %s"%(p))
+                    print("-"*10)
+                    print("\n")
+                
+                if team_1_prob < team_2_prob:
+                    print("%s vs. %s: %s avança com probabilidade %.2f"%(home, away, away, team_2_prob))
+                    next_rounds.append(away)
+                else:
+                    print("%s vs. %s: %s avança com probabilidade %.2f"%(home, away, home, team_1_prob))
+                    next_rounds.append(home)
+                game.append([team_1_prob, team_2_prob])
+                playoffs[p][i] = game
+                actual_round = p
+    return playoffs
+
+def simulation_quartas(advanced, model):
+    playoffs = {"Oitavas de Final": [], "Quartas de Final": [], "Semi-Final": [], "Final": []}
+    for p in playoffs.keys():
+        playoffs[p] = []
+    actual_round = ""
+    next_rounds = []
+
+    for p in playoffs.keys():
+        if p == "Oitavas de Final":
+            playoffs = {'Oitavas de Final': [['Netherlands', 'United States', [100, 0]], 
+                                            ['Argentina', 'Australia', [100, 0]], 
+                                            ['Japan', 'Croatia', [0, 100]], 
+                                            ['Brazil', 'South Korea', [100, 0]], 
+                                            ['Senegal', 'England', [0, 100]], 
+                                            ['Poland', 'France', [0, 100]], 
+                                            ['Spain', 'Morocco', [100, 0]], 
+                                            ['Switzerland', 'Portugal', [0, 100]]], 
+                        'Quartas de Final': [], 'Semi-Final': [], 'Final': []}
+            next_rounds = ['Netherlands', 'Argentina', 'Croatia', 'Brazil', 'England', 'France', 'Morocco', 'Portugal']
+            
+        else:
+            print('a')
+            playoffs[p] = [[next_rounds[c], next_rounds[c+1]] for c in range(0, len(next_rounds)-1, 1) if c%2 == 0]
+            next_rounds = []
+            for i in range(0, len(playoffs[p])):
+                game = playoffs[p][i]
+                home = game[0]
+                away = game[1]
+                team_1 = find_stats(home)
+                team_2 = find_stats(away)
+                
+                features_g1 = find_features(team_1, team_2)
+                features_g2 = find_features(team_2, team_1)
+                
+                probs_g1 = model.predict_proba([features_g1])
+                probs_g2 = model.predict_proba([features_g2])
+                
+                team_1_prob = (probs_g1[0][0] + probs_g2[0][1])/2*100
+                team_2_prob = (probs_g2[0][0] + probs_g1[0][1])/2*100
+                
+                if actual_round != p:
+                    print("-"*10)
+                    print("Começando a simulação de  %s"%(p))
+                    print("-"*10)
+                    print("\n")
+                
+                if team_1_prob < team_2_prob:
+                    print("%s vs. %s: %s avança com probabilidade %.2f"%(home, away, away, team_2_prob))
+                    next_rounds.append(away)
+                else:
+                    print("%s vs. %s: %s avança com probabilidade %.2f"%(home, away, home, team_1_prob))
+                    next_rounds.append(home)
+                game.append([team_1_prob, team_2_prob])
+                playoffs[p][i] = game
+                actual_round = p
+    return playoffs
